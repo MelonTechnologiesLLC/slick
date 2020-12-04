@@ -1360,10 +1360,15 @@
             _.$dots.attr('role', 'tablist').find('li').each(function(i) {
                 var mappedSlideIndex = tabControlIndexes[i];
 
+                if (mappedSlideIndex === undefined) {
+                    var j = i - _.$dots.length;
+                    mappedSlideIndex = tabControlIndexes[j];
+                }
+        
                 $(this).attr({
                     'role': 'presentation'
                 });
-
+        
                 $(this).find('button').first().attr({
                     'role': 'tab',
                     'id': 'slick-slide-control' + _.instanceUid + i,
@@ -1372,7 +1377,7 @@
                     'aria-selected': null,
                     'tabindex': '-1'
                 });
-
+        
             }).eq(_.currentSlide).find('button').attr({
                 'aria-selected': 'true',
                 'tabindex': '0'
@@ -2983,15 +2988,19 @@
 
         if (_.$dots !== null) {
 
-            _.$dots
-                .find('li')
-                    .removeClass('slick-active')
-                    .end();
+            _.$dots.each(function (i) {
+                
+                _.$dots.eq(i)
+                    .find('li')
+                        .removeClass('slick-active')
+                        .end();
 
-            _.$dots
-                .find('li')
-                .eq(Math.floor(_.currentSlide / _.options.slidesToScroll))
-                .addClass('slick-active');
+                _.$dots.eq(i)
+                    .find('li')
+                    .eq(Math.floor(_.currentSlide / _.options.slidesToScroll))
+                    .addClass('slick-active');
+
+            });
 
         }
 
